@@ -19,6 +19,7 @@ class ExpandableListAdapter(
     private val expandableListTitle : List<String>,
     private val expandableListDetails : HashMap<String, List<String>>,
     private val selectedItems : MutableList<String>,
+    private val selectedGroups : MutableList<Int>,
     private val listViewAdapter : ArrayAdapter<String>
 ) : BaseExpandableListAdapter(){
     override fun getGroupCount(): Int {
@@ -57,8 +58,25 @@ class ExpandableListAdapter(
         val convertViews = LayoutInflater.from(context).inflate(R.layout.list_group, null)
         val listTitle = getGroup(groupPosition) as String
         val listTitleText = convertViews.findViewById<View>(R.id.list_title) as TextView
+        val checkBox = convertViews.findViewById<CheckBox>(R.id.cb_group)
         listTitleText.setTypeface(null,Typeface.BOLD)
         listTitleText.text = listTitle
+
+        checkBox.isChecked = selectedGroups.contains(groupPosition)
+
+        checkBox.setOnClickListener {
+            val isChecked = checkBox.isChecked
+            if (isChecked){
+                selectedGroups.add(groupPosition)
+            }else{
+                selectedGroups.remove(groupPosition)
+            }
+            toggleChildrenSelection(groupPosition, isChecked)
+            listViewAdapter.notifyDataSetChanged()
+            notifyDataSetChanged()
+        }
+
+
 
         return convertViews
     }
@@ -96,5 +114,17 @@ class ExpandableListAdapter(
         groupPosition: Int,
         childPosition: Int): Boolean {
         return true
+    }
+    private fun toggleChildrenSelection(
+        groupPosition: Int,
+        isChecked : Boolean
+    ){
+        val childItems = expandableListDetails[expandableListTitle[groupPosition]]
+        if (childItems != null){
+            if (isChecked)
+                selectedItems.addAll(childItems)
+            else
+                selectedItems.removeAll(childItems)
+        }
     }
 }

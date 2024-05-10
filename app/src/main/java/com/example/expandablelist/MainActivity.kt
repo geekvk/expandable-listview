@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private var expandableListDetails : HashMap<String, List<String>> = HashMap()
 
     private val selectedItems = ArrayList<String>()
+    private val selectedGroups = ArrayList<Int>()
 
     val cricket : MutableList<String> = ArrayList()
     val footBall : MutableList<String> = ArrayList()
@@ -46,26 +47,23 @@ class MainActivity : AppCompatActivity() {
             expandableListTitle,
             expandableListDetails,
             selectedItems,
+            selectedGroups,
             listViewAdapter
         )
         binding.expView.setAdapter(adapter)
 
 
-//        binding.expView.setOnGroupClickListener { parent, view, groupPosition, id ->
+//        binding.expView.setOnGroupExpandListener {groupPosition ->
 //            val selectedGroup = expandableListTitle[groupPosition]
-//
+//            selectedGroups.add(groupPosition)
+//            adapter.notifyDataSetChanged()
 //            false
 //        }
 //        binding.expView.setOnChildClickListener{
 //                parent, v, groupPosition, childPosition, id ->
 //            val selectedItem = expandableListDetails[expandableListTitle[groupPosition]]?.get(childPosition) as String
-//            Log.d("selectedItem->", selectedItem)
-//            if(selectedItems.contains(selectedItem)){
-//                selectedItems.remove(selectedItem)
-//            }else{
-//                selectedItems.add(selectedItem)
-//            }
-//            listViewAdapter.notifyDataSetChanged()
+//            selectedGroups.remove(groupPosition)
+//            adapter.notifyDataSetChanged()
 //            true
 //        }
     }
